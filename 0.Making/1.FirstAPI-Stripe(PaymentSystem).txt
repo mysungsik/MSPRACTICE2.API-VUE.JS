@@ -1,0 +1,27 @@
+[0. API와 SERVICE 를 적용하는 방법]
+: 패키지와, API, SERVICE 마다 전부 다르므로
+= 반드시 설명서를 참조하여 추가해야한다!
+
+[0. 용어]
+    1) API
+
+    2) API KEY : 제공하는 API( 현재, stripe API)로 "요청"을 보낼 수 있는 키 [ 마치 csrfToken 처럼 요청을 보낼때, 같이 보내서 신원을 확인함]
+
+
+* 들어가기에 앞서
+ : 어차피 테스트모드니까, 안심하고 막 등록하는 [결제 API이다!]
+
+[1.FirstAPI-Stripe(PaymentSystem)]
+    stripe 홈페이지 - [상단바] - Developers - Prebuilt Checkout - quick start
+    URL : https://stripe.com/docs/checkout/quickstart?lang=node
+
+[2. 설명서 참고하여 하나씩 해보자]
+ * 우선 계정만들고
+
+    1) 대쉬보드 상단 위, Developer
+
+    2) API KEY 확인
+        URL : https://dashboard.stripe.com/test/apikeys
+
+    3) 1번. Set up the server
+

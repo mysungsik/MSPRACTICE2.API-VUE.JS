@@ -1,0 +1,25 @@
+0. REST API
+
+    URL 기반 API 를 구축하는 특정 패턴
+    : REprenseational State Transfer
+
+    대부분 이것으로 API 를 만들기때문에, 그냥 API 라고 말하는 것도 REST API 일 수 있다.
+
+1. 한가지 매우 중요한 룰
+
+    API의 끝점(EndPoint)은 URL + HTTP Method
+    
+    [HTTP Method] + [URL]       ==> [action]
+        GET         /cars           return list of cars
+        POST        /rental             store 
+        PATCH       /user/:id           update user 
+
+    ==> 개발자(API를 구축하는 사람)가 URL 기반 API 를 구축하면
+        사용자(웹사이트를 만드는 고객)는 API URL의 끝점(EndPoint)로 요청을 보내, 특정 응답을 받는 형태
+
+    * API의 끝점의 HTTP METHOD는 기본적으로, 사용자에게 어떤 일이 일어날지 힌트를 주어야한다.
+        GET은 요청, DELETE는 삭제 처럼  (만들때, 그렇게 만들어야 한다.)
+
+2. 어차피, 작용하는것은 서버코드(백엔드). 백엔드 코드를 아주 잘 짜야한다.
+
+    => API 의 반환은 "데이터"이다. view를 render 하는게 아니라, "데이터를 보내는것이다."

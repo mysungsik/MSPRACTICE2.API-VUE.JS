@@ -1,0 +1,99 @@
+[ 챕터목표 ]=====================================================================================================================
+
+1. URL BASED API 를 이해하고, 랜덤의 문자배열을 나타내는 API 만들어 보자
+
+2. "ToDo" 를 추가하고, 업데이트하고, 삭제하는 API를 만들어보자
+
+3. "POST MAN" 사이트를 통해서, API를 실험해보자 (페이지에서, REQUEST를 날릴 수 잇음)
+
+
+[ 배운 이론 ]=====================================================================================================================
+
+1. 결국 우리가 만들던 "웹사이트의 route" 와  "API 를 위한 route" 는, 종이 한 장 차이 이다.
+
+==> 페이지를 반환하는가, 데이터를 반환하는가의 차이 정도뿐이다.
+
+    route.get("/", quoteController.simpleQuote)
+    ==> 이게 데이터를 반환하면 API가 된다.
+
+
+[ 배운기술 ]=====================================================================================================================
+
+1. 랜덤 수를 소환해서, 총 배열의 수를 뽑아 곱한후, 내림처리해서, 랜덤인덱스숫자를 만들 수 있다.
+
+    const quote = await db.getDb().collection("quote").find().toArray()
+    const randomQuoteIndex = Math.floor( Math.random() * quote.length )
+
+    const randomQuote = quote[randomQuoteIndex];
+
+2. DB에서 뽑아온 값을, 재정리해서 원하는 형태로 만들기
+
+    class Todo {
+        constructor(text,id){
+            this.text = text;
+            this.id = id;
+        }
+        
+        static async getAllTodos(){
+            const allTodos = await db.getDb().collection("todos").find().toArray();
+                    ==>> 반환되면, [{}, {}, {},..]
+
+            return allTodos.map(function(item){
+                return new ToDo(item.text, item._id)
+                    ==> 각각의 배열 인덱스에 대하여, 모두 이렇게 실행됨
+            })
+
+        }
+    }
+
+3. save 한 후, save 한 id를 retun하여, 객체에 다시 집어넣어, [값과 넣은 값의ID가 동시에 존재하는 완벽한 객체 만들기]
+
+    질문 : insertOne({}) 을 promise 로 받은 retrun은 도대체 무엇을 return(보유) 하는가?
+-           => 이것을 알아내야
+
+        const todo = new Todo(text)
+        let insertedId;
+
+        const result = await todo.save();
+    -   insertedId = result.insertedId;         ==> 이것을 이해할 수 있다.
+
+        todo.id = insertedId.toString();
+
+
+    결론 : db에서 save의 retrun 값은, 저장된 값의 id를 return 한다!
+        {
+            acknowledged: true,
+            insertedId: new ObjectId("6346569a019eb8d882e2b32a")
+        }
+        ==> 저장된 값의 id를 return 한다!
+   
+
+    최종 : 
+        save 를 한 후, save 한 데이터의 id 값을 받아("result.insertedId") , [insertedId 라는 변수]에 넣고
+        사용자 함수를 받은 객체, todo에 todo.id 의 값으로 그것을 집어넣는다.
+
+            *toString() 을 잊지말자, save를 반환한 id 는 ObjectId 로 되어있다.
+
+
+
+4. POST MAN 사이트를 활용하여, API 실험(검증) 하기
+
+    : POST MAN은 REQUEST를 보내 내 API가 제대로된 값을 반환하고, 집어넣는지 확인 할 수 있다.
+
+[ 복습기술 ]=====================================================================================================================
+
+1. database의 연결
+    => "mongodbClient" 는 "client" 를 만드는것이다." mongodb 서버"와 "connect" 를 하기위한
+    => "database" 는 서버와 연결한 "client" 에 "db를 연결하는 것이다."  
+        [client.db("db이름")]
+
+2. Model에서, db의 find, save, update 등은, 스스로 promise 를 반환하기 때문에, [await를 적거나, 굳이 변수로 뽑아서 return 하지 않고도], 바로 retrun 할 수 있다. 
+
+    return db.getDb().collection("todo").find().toArray();
+    return db.getDb().collection("todo").upadateOne({_id:todoId},{$set:{text: this.text}})
+    return db.getDb().collection("todo").insertOne({text: this.text})
+    ...
+
+3. try,catch를 쓰면 try 안의 값은 안에서만 쓸 수 있다는 사실을 명심
+
+4. try 바깥에, let으로 변수를 정해놓고, try 안에서 그 변수를 조정할 수 있다. 그 변수가 만약 배열이나, 객체라면, 그 값은 실제로 값이 변할것이다.
