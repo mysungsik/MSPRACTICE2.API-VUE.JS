@@ -1,0 +1,46 @@
+1. SPA(Single Page Application)의 장점
+    : 프론트엔드와 백엔드를 구분해 놓음으로써, 유저들은, 데이터를 받아오는 시간을 기다릴 필요 없이,
+        좋은 사용감을 얻을 수 있다.
+
+2. 연결 그리고 CORS 에러
+
+    1) 브라우저 메커니즘
+        : 일종의 보안 메커니즘으로, 한 서버에서, 다른 서버의 접근을 막는 메커니즘
+
+        => 브라우저 기반의 API에 접근하려니, 브라우저 메커니즘인 CORS 가 막는것이다.
+
+    2) CORS( Cross-Origin Resource Sharing)
+
+    같은 도메인(같은 서버)끼리만 편하게 데이터를 주고 받을 수 있다.
+
+-       ==> 오직, 백엔드 개발자(API 개발자) 만이, 들어오는 것을 허용 할 수 있다. 
+            브라우저는 그런 것을 허용 할 수 없다. API(백엔드) 개발자가, 들어오라고 해야 들어 올 수 있는것이다.
+
+        ==> API 의 "헤더" 를 변경해서, 접속을 허용할 수 있다.
+
+    3) 접속을 허용하는 "헤더"의 종류
+
+        Access-Control-Allow-Origin => 리소스허용
+        Access-Control-Allow-Methods => Get,post등의 Methods 허용
+        Access-Control-Allow-Headers => 추가적인 Header 의 허용
+
+3. res.setHeader() : response 를 허용하는, 헤더를 세팅하는 express의 내장함수, [미들웨어를 사용하여 추가!]
+    
+    * setHeader("헤더종류", "허용할 도메인")
+
+    1. res.setHeader("Access-Control-Allow-Origin" , " mspage.com ")
+
+        => mspage.com 에 대한, 접속을 허용한다.
+        => 전부 허용하고 싶으면 " * " 을 사용한다.
+
+    2. res.setHeader("Access-Control-Allow-Methods" , "GET,POST,PATCH,DELETE,OPTIONS")
+
+        => 허용한 페이지 에 대해, 저 Method 들을 허용한다.
+-       ** OPTIONS : 백엔드에서 컨트롤 하는 Method는 아니지만, Ajax 요청을 할때, 브라우저에서 자동으로 들어오는 요청으로,
+-           브라우저가 정말로 이 요청을 하길 원하는지 평가하는 Method로, 필수적이다!
+
+    3. res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+
+        => 사용자가 사용할 Header 를 추가한다.
+
+    

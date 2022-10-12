@@ -6,7 +6,7 @@ let editedTodoElement;
 async function loadTodos() {
   let response;
   try {
-    response = await fetch('http://localhost:3000/todos');    // 이 페이지는, 정적 페이지로, API SERVER에 있는 JSON 데이터를 가져오려면,
+    response = await fetch('http://localhost:3000/todo');    // 이 페이지는, 정적 페이지로, API SERVER에 있는 JSON 데이터를 가져오려면,
   } catch (error) {                                          // "http://localhost:3000/todos" 처럼 도메인을 확실하게 적어야한다. [다른 페이지니까]
     alert('Something went wrong!');
     return;
@@ -54,7 +54,7 @@ async function createTodo(todoText) {        // todo 만들기 (API는 SAVE)
   let response;
 
   try {
-    response = await fetch('http://localhost:3000/todos', {
+    response = await fetch('http://localhost:3000/todo', {
       method: 'POST',
       body: JSON.stringify({
         text: todoText,           // API에서 TODO의 INPUT을 위한 "키"는 "text" 였기 때문에!
@@ -84,7 +84,7 @@ async function updateTodo(newTodoText) {
   let response;
 
   try {
-    response = await fetch('http://localhost:3000/todos/' + todoId, {
+    response = await fetch('http://localhost:3000/todo/' + todoId, {
       method: 'PATCH',
       body: JSON.stringify({
         newtext: newTodoText,                   // API에서 업데이트를 위한 "키"는 "newtext"였다.
@@ -117,7 +117,7 @@ async function deleteTodo(event) {
   let response;
 
   try {
-    response = await fetch('http://localhost:3000/todos/' + todoId, {
+    response = await fetch('http://localhost:3000/todo/' + todoId, {
       method: 'DELETE',
     });
   } catch (error) {
