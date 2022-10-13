@@ -1,0 +1,238 @@
+[ 챕터목표 ]=====================================================================================================================
+
+1. JS에 VUE를 연결한다.
+
+2. 연결한 VUE와 HTML과의 상호작용을 해본다.
+
+3. AJAX REQUEST를 통해 서버와 통신한다.
+
+[ 배운 이론 ]=====================================================================================================================
+
+1. 신비하게도, data안에 있는 값을, methods 에서 this로 받을 수 있지만!!
+    methods 안에 있는 또다른 함수(매서드) 안에서는 this 를 사용하여 data의 값을 받을 수 없으므로, 
+-   미리 정의해서 변수로 사용한다.
+
+    methods : {
+        function1(){
+            ...
+-           this.data 가능 [O]
+            function insidefunction(){
+-               this.data 불가능 [X]
+            }
+        }
+
+        function2(){
+-           const X = this.data
+            function insidefunction(){
+-              x = ...                     ==>> "이것처럼 this를 포함하는 것을, 바깥에 정의해서 x 를 사용"
+            }
+        }
+
+        ...
+    }
+
+2. Array.find() 와 Array.findIndex() , Array.filter()
+
+    => [ 배열을 전부 검사해 ], 파라미터 안의 값이 참이라면, 반환한다. "find, findIndex 는 만나는 첫번째 값만"
+    => [무언가를 찾거나, 걸러내는데 아주 중요한 역할을 한다.]
+
+[ 배운 기술 ]=====================================================================================================================
+
+1. 연결(install)
+    URL : https://vuejs.org/guide/quick-start.html
+
+    1) 연결에는 두가지 방법이 있다.
+    
+        CLI 를 사용하는 방법 ( npm init vue@latest )
+        CDN 을 사용하는 방법 ( <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 을 HTML에 추가) * 바뀔수 있음. 설명서참조
+
+        * CDN (Content Delivery Network)
+            : 네트워크를 통해, 컨텐츠를 제공하는 방법 (자세한건 검색), 캐시서버에 컨텐츠를 담아, 분산배치하여, 거리를 줄임으로써, 사용자에게 빠른 제공
+
+        => 차이점 : CDN은  "Single-File Component (SFC) syntax "를 사용할 수 없다.
+        
+    2) HMTL과 연결
+
+        : 원하는 앱이름안에 객체 {} 를 넣고, "data(){} 매서드" 를 담는다!
+
+            "data 메서드" 에서는 "아무거나 객체형식으로 반환한다."
+
+           " Vue.createApp" 안에 "적은 앱이름"을 넣고, "mount 함수 를 통해 연결"한다 
+
+           mount() 안에는 "대부분 쿼리형식" 으로 "연결할 요소를 넣는다."
+
+-           * 덩어리진 중간보스 정도의 부모요소에 다는것이 매우 유리하다.
+            
+
+-       <기본>  : 변수에 담아서 진행, Vue에서 메서드를 따로 뽑지 않고, 직접 사용해서 진행
+
+            const [변수] = {
+-               data(){                    // 필수항목
+                    return {
+                        message : "hello!"
+                    }
+                }
+            }
+
+            Vue.createApp(변수).mount("#todo-main");
+        
+
+-       < 설명서 > : Vue 에서 매서드를 바로 뽑아서 진행
+
+            const { createApp } = Vue
+
+            createApp({
+                data() {
+                    return {
+                    message: 'Hello Vue!'
+                    }
+                }
+            }).mount("#todo-main")
+
+
+2. 기본 사용
+
+    :  HTML에 특수구문  {{ }} 을 사용하여, VUE에 저장된, 값이 불러와진다.
+
+    "data메서드"에 의해 반환된 "message" 에 대한 값을 "HTML에 넣음"
+
+        마치 EJS 구문처럼
+
+    < HTML >
+
+        <main id="todo-main">
+-              <h2>   {{ message }}   </h2>
+            <section id="todo-management">
+                <form>
+                    <label for="text">Todo text</label>
+        ...
+
+    < 결과 >
+        화면에, hello Vue 라는 h2 태그가 찍혀나온다.
+
+
+3. 기본 심화 사용 : @행동 = "함수이름" ;  "함수를 만들어", HTML 에 직접 사용 [ INSTEAD "function" and "addEventListener"]
+
+    =>  " methods : {} " 라는 객체를 이용하여, 객체 안에는 "적용할 함수"를 만들고,
+            "함수 이름"을 "HTML 태그" 옆에 "특수구문" [ @submit ="함수이름"] 를 사용하여 적용 [@click, @submit, @change 등등... 이벤트다]
+
+        const { createApp } = Vue
+
+        createApp({
+            data() {
+                return {
+                message: 'Hello Vue!'
+                }
+            }
+            methods:{
+                saveTodo(event){
+                    event.preventDefault();
+                    this.message = "updated!"
+                }
+            }
+        }).mount("#todo-main")
+
+-    ** VUE.JS의 마술이 여기서 발동한다.
+        this.message 라 함은, 메서드에서 this를 사용했으므로, "this는 해당 메서드를 호출한 객체"인, "methods" 를 받아야하지만
+            "vue는 this 를 그 상위 항목인, data 를 받게한다"
+        ==> this.message 는, data.message를 받아, HTML에 넣은 {{ message }} 즉,  data.message를 바꾼다.
+
+
+4. v-model을 통한 양방향 바인딩; HTML에서 VUE로 (새롭게! ), VUE 에서 HTML(위에했던것)로  "양방향 바인딩"
+    :" VUE 를 사용한 JS"에서 "HTML"로, "함수와 값"을 전부 보내보았다.
+    : 이제 "HTML"에서, "VUE를 사용하는 JS"로 값을 넘겨볼것이다.
+
+    < HTML >
+
+        <input type="text" v-model="enteredTodoText" > 
+        ...
+
+    <JS>
+        
+        const Todo = {
+            data(){
+                return{
+                    message:"hello!",
+                    enteredTodoText:""
+                } 
+            }
+            methods:{
+                saveTodo(event){
+                    event.preventDefault();
+                    this.message = "updated!"
+                }
+            }
+        }
+
+        Vue.createApp(Todo).mount("#todo-main")
+
+    ==> HTML 에서, 즉, "브라우저"에서, "input 안에 값을 입력하면", <JS>의 "enteredTodoText 가 바뀐다."
+    ==> <JS>에서 enteredTodoText 를 바꾸면, HTML의 input값 안에, 값이 채워진 채로 브라우저가 시작된다.
+
+    ==>> "서로" 소통 가능하니, "양방향 바인딩" 이라고 한다.
+
+
+5. v-for 을 통해, HTML 반복문 만들기 (마치, EJS구문처럼)
+
+    <JS>
+    ...
+        data(){
+            return{
+                todos = []
+                enteredTodoText = ""
+            }
+        }
+        methods :{
+            saveTodo(event){
+                event.preventDefault();
+                const newTodo = {
+                    text : this.enteredTodoText,
+                    id: new Date().toISOString()
+                }
+                this.todos.push(newTodo)
+                this.enteredTodoText = ""
+
+            }
+        }
+
+    <HTML>
+        ...
+        <form @submit="saveTodo">
+            <input type = "text" v-model="enteredTodoText" >
+        ...
+
+        <ul id ="todolist">
+-           <li v-for ="todo in todos" >
+-               <p> {{ todo.text }}</p>
+-           </li>
+
+        ...
+
+    ==> <HTML> "v-for" 에서 "todos" 는, <JS> "data" 에서 가져온 "todos" 이다
+
+-    ** 잠깐잠깐 보이는, "플래싱 현상"은 나중에 검색해서 없애보자
+
+6. v-if 을 통해, 조건에 따라, 태그를 표시하기
+
+    <HTML>
+    ...
+    <form @submit="saveTodo">
+        <input type = "text" v-model="enteredTodoText" >
+    ...
+-       <p v-if="todos.length===0"> todos have to be at least one </p>
+-       <ul v-else id ="todolist">
+            <li v-for ="todo in todos" >
+                <p> {{ todo.text }}</p>
+            </li>
+
+    ...
+
+    ==> "v-else"가 아니라, 또다른 "v-if" 를 써서 조건을 쓰면 "else if" 처럼 사용도 가능하다
+
+7. 데이터 업데이트 해보기
+
+
+[ 복습기술 ]=====================================================================================================================
+    
+
+    
