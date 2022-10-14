@@ -7,7 +7,7 @@
     <title>Todos</title>
     <link rel="stylesheet" href="styles/main.css" />
 
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="scripts/app.js" defer></script>
   </head>
   <body>
@@ -15,17 +15,33 @@
       <h1>Todo Management</h1>
       <p>Manage your (daily) todos with ease!</p>
     </header>
+
     <main id="todo-main">
       <section id="todo-management">
-        <form>
+        <p> {{ message }}</p>
+        <p> {{ insertedText }}</p>
+        <form @submit="saveList">
           <label for="text">Todo text</label>
-          <input type="text" id="text" name="text" required />
+          <input type="text" id="text" name="text" required v-model="insertedText" />
           <button>Save</button>
         </form>
       </section>
       <section id="todos">
-        <ul id="todos-list">
+        <p v-if="todoList.length ===0 && !isLoading"  > you have no todo!</p>
+        <p v-else-if="isLoading"> Loading...</p>
+        <ul id="todos-list" v-else>
+
+          <li v-for="todo in todoList">
+              <p> {{ todo.text }}</p>
+              <div>
+                <!-- vue 에서는, ()를 붙인다고 바로 실행되지 않는다. 반드시 event(click, submit, change ...) 의 영향을 받는다. -->
+                <button @click="editList(todo.id)"> edit </button>
+                <button @click="deleteList(todo.id)"> delete</button>
+              </div>
+          </li>
+
         </ul>
+        <p> {{ insertedId }}</p>
       </section>
     </main>
   </body>
