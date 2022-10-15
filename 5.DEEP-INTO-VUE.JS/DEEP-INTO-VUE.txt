@@ -1,0 +1,302 @@
+[ 기본 ]=================================================================================================================================
+
+1. 설치
+
+    1) vue 설치
+        : npm install -g vue  
+
+    1.1) 확인
+        : vue --version
+
+    2) vue cli 설치
+        : npm install vue@cli
+
+        ==> 프로그램 구동을 위한, 폴더구조, 기본파일 들을 간단하게 "만들어 줄 수 있는" 도구
+
+            * VUE 프로젝트 기본 골격(구조)를 어떻게 만들지 고민하지 않아도 되고
+            * VUE 프로젝트가 "구조화된 프로젝트가 되어" , 아무나 만들어도 같은 골격을 가지게 될 수 있다.
+
+            * VUE 공식사이트는, "VUE CLI" 말고, "VUE VITE" 를 권장하고있긴 하다.
+
+    3) 확장설치(선택)
+        :   "vetur" 설치
+
+
+2. 프로젝트 생성
+
+    1) 프로젝트 설치할 폴더로 이동후!,
+        "vue create project01"
+
+    2) 버젼선택
+        Vue CLI v5.0.8
+        ? Please pick a preset: (Use arrow keys)
+            > Default ([Vue 3] babel, eslint) 
+            Default ([Vue 2] babel, eslint) 
+            Manually select features
+
+        * vue에서 사용가능한 오픈소스 모듈들이, vue2 이 훨씬 많기 때문에, vue2를 실무에서 사용할 수도 있기 때문에, 옵션이 있는것이다. 
+
+-       사실상 vue는 vue환경보다, 사용가능한 오픈소스가 더 중요할 수 있기 때문에
+        그럼에도 불구하고 나는 "vue3"!
+
+    3) 설치완료
+
+        🎉  Successfully created project project01.
+        👉  Get started with the following commands:
+
+        $ cd project01
+        $ npm run serve
+
+        ...
+
+3. 실행
+
+    1) 프로젝트 폴더로 이동후
+        cd project01
+
+    2) 실행
+        npm run serve
+
+4. [ package.json ] 확인
+
+    1) private : npm 서버에, 내 vue가 보이게할거냐, private 하게 쓸거냐
+        * "true" 로 하면, 숨겨진다.
+
+    2) script : nodemon 처럼 "명령어 단축키 모음"
+
+    3) dependencies
+        : 배포 환경에서 가져가야할 모듈들 모음 
+    
+    4) devDependencies
+        : 개발 환경에서 사용할 모듈들 모음
+
+    * "devDependencies" 에 존재하는 모듈(오픈소스) 들도, 누군가가 "개발한 모듈"이다.
+        그" 모듈들을 개발할때, 사용한 또다른 모듈(오픈소스)"들은 "package-lock.json"에 모여있다.
+        , 그래서, 수많은 모듈들이 node_modules 에 설치되는 것이다.
+
+    5) eslintConfig
+        : 나중에...
+
+    6) browserslist: 
+        [
+        "> 1%",                     => 최소한 전세계 인구의 1% 이상이 사용하는 브라우저만 지원하겠다(ex. 크롬, 사파리 등...)
+        "last 2 versions",          => 최근 두개의 버젼만 지원한다.
+        "not dead",                 => ?
+        "not ie 11"                 => 인터넷 익스플로러11 은 지원안한다.
+        ]
+
+        
+4. [ src ] 확인
+
+    1) main.js
+        : "npm run serve" 명렁어로, vue를 실행시키는 순간, 가장 먼저 실행되는 파일이다.
+
+        import { createApp } from 'vue'     => "vue" 에서 "createApp" 메서드를 추출하겠다.
+        import App from './App.vue'         => "./App.vue" 파일을 가져와라, 이름은 "App" 이라고 하겠다
+            
+        createApp(App).mount('#app')        => "App" 이라 이름지은 파일을 연결해, <HTML>의 "id"가 "app 인 태그를 연결"하겠다.
+
+
+5. VUE의 기본구조
+
+    1) "VUE는" "Single Page Application" 에 적합하다.
+        => 모든 "VUE" 파일은 결국 "public"의 "index.html" 에 연결되며,
+            "mount" 되는 모든 것은 전부 "index.html" 안에 있는 태그에 연결되는것이다.
+
+    2) "App.vue" 안에는
+
+        <template>  : index.html 안에 들어갈 HTML 코드들을 넣음
+        <script>    : import, export, 등의 스크립트 등이 들어감 
+        <style>     : 적용할 CSS 스타일이 들어감
+
+    3) "열린 페이지" 에서 오른쪽 마우스를 눌러, "페이지 소스보기" 를 눌러보면,
+        코드가 보이는데, "index.html" 의 태그들만 보이고 아무것도 보이지 않는다.
+        
+        이유는, "Vue 가 동적으로 자바스크립트 파일을 통해서, 제공하기 때문이다."
+
+
+
+[ 본격적인 시작 ]=================================================================================================================================
+
+1. MANUAL 설치 + 확인
+    : "vue create project" 로, 프로젝트를 만든 후,  "MANUAL 설치"를 한다.
+
+    1) Vue CLI v5.0.8
+
+    ? Please pick a preset: Manually select features
+    ? Check the features needed for your project: (Press <space> to select, <a> to toggle all, <i> to invert selection, and <enter> to proceed)
+
+        >(*) Babel                              ==> "최신버전 자바스크립트"가 먹히지 않는 "구 브라우저"를 위해, "구 자바스크립트 코드로 변환시켜줌"           
+        ( ) TypeScript                          ==> 타입스크립트 쓸거면 체크
+        ( ) Progressive Web App (PWA) Support   ==> 모바일 처럼 웹을 구현해주는 기술(PWA) 사용할거면 체크
+-       ( ) Router                              ==> "메뉴구성시", "화면이동이 가능하게 만들어주는" 모듈 [체크]
+        ( ) Vuex                                ==> "모든 Vue 컴포넌트를 저장하고, 상태관리 해주는" 모듈 [체크]
+        ( ) CSS Pre-processors
+        (*) Linter / Formatter                  ==> " 자바스크립트의 코딩 컨벤션(코딩 규칙 ex)얼마나 들여쓰기, 큰,작은따옴표 등...)" 을 정해주는 모듈 [체크]
+        ( ) Unit Testing
+        ( ) E2E Testing
+
+    ==> "선택"은 "스페이스바"
+
+    2) 버젼은 3.0
+
+    3) "라우터에 히스토리모드 쓰냐? yes"
+        ? Please pick a preset: Manually select features
+        ? Check the features needed for your project: Babel, Router, Vuex, Linter
+        ? Choose a version of Vue.js that you want to start the project with 3.x
+        ? Use history mode for router? (Requires proper server setup for index fallback in production) (Y/n) 
+
+    4) " 코딩 컨벤션 규칙 선택 "
+
+        ? Please pick a preset: Manually select features
+        ? Check the features needed for your project: Babel, Router, Vuex, Linter
+        ? Choose a version of Vue.js that you want to start the project with 3.x
+        ? Use history mode for router? (Requires proper server setup for index fallback in production) Yes
+        ? Pick a linter / formatter config: (Use arrow keys)
+            ESLint with error prevention only
+            ESLint + Airbnb config
+            ESLint + Standard config        ==> "가장 표준화된 이것 선택"
+            ESLint + Prettier
+
+    5) "Lint" "코딩규칙 적용은 언제 할건가?"
+        ? Please pick a preset: Manually select features
+        ? Check the features needed for your project: Babel, Router, Vuex, Linter
+        ? Choose a version of Vue.js that you want to start the project with 3.x
+        ? Use history mode for router? (Requires proper server setup for index fallback in production) Yes
+        ? Pick a linter / formatter config: Standard
+        ? Pick additional lint features: (Press <space> to select, <a> to toggle all, <i> to invert selection, and <enter> to proceed)
+
+        >(*) Lint on save                   ==> "저장하자마자 바로"
+        ( ) Lint and fix on commit
+
+    6) "설정파일은 각각 모듈마다 할래", "아니면 package.json 에 한번에 묶어서 할래?"
+
+        ? Please pick a preset: Manually select features
+        ? Check the features needed for your project: Babel, Router, Vuex, Linter
+        ? Choose a version of Vue.js that you want to start the project with 3.x
+        ? Use history mode for router? (Requires proper server setup for index fallback in production) Yes
+        ? Pick a linter / formatter config: Standard
+        ? Pick additional lint features: Lint on save
+        ? Where do you prefer placing config for Babel, ESLint, etc.? (Use arrow keys)
+
+        In dedicated config files
+        > In package.json           ==> "전부 한파일에"
+
+    7) "여태 저장한 너의 선택한것을 프리셋으로 저장할래?" "YES"
+        ? Save this as a preset for future projects? (y/N)
+
+    8) "프리셋 이름은 뭘로할래"
+        :   "vue-project"로 일단 저장함
+
+    
+-   9) 설치하고 실행하면, "기본설치" 때는 보이지 않던, "상단 메뉴" "home 과 About"이 생긴다.
+
+        : 앞서 설치한 "Router" 의 역할이다.
+
+    10) 기본설치와 비교해보자
+
+        "src" 폴더 내에, "router", "store", "views" 가 새로 생겼다.
+
+        "package.json" 파일에
+            "vue-router": "^4.0.3",
+            "vuex": "^4.0.0"
+        이것들이 추가로 설치되었고
+
+        "main.js"에는
+            import router from './router'
+            import store from './store'
+            createApp(App).use(store).use(router).mount('#app')
+        새로운 import 들과, App의 연결방법이 변화하였고,
+
+        "App.vue"
+            <router-link to="/">Home</router-link> |
+            <router-link to="/about">About</router-link>
+        새로운 "router-link" 가 생겼다.
+
+        ==>> 그렇지만, 여전히! index.html 하나의 페이지에 모든 것들은 자바스크립트로 동적구현이 되기때문에,
+            페이지 소스보기를 눌러도, 태그의 변화는 없다.
+
+
+2. 기본구조
+    : 어디가 어디로 연결되어있는지 파악해보자.
+
+    1) /src/main.js
+        => "App.vue" 와" 기타등등"을 "import" 해서 메인 "index.html 에 mount한다."
+
+    2) /src/App.vue
+        => "main.js 에 들어가는 메인 파일"로, 
+            "페이지 변경이 될, 메뉴" 가 될  "라우터로 접속할 URL 혹은 상대주소" 들을 연결하고,
+                <template>
+                    <nav>
+                        <router-link to="/">Home</router-link> |        ==> "메뉴변경할 URL 혹은 상대주소" => /src/router/index.js 에 정확한 값들이있다.
+                        <router-link to="/about">About</router-link>    ==> "메뉴변경할 URL 혹은 상대주소" => /src/router/index.js 에 정확한 값들이있다.
+                    </nav>
+                    <router-view/>
+                </template>
+            "이것저것 연결한것을 종합할 메인 vue파일이 됐다."
+
+    3) /src/router/index.js
+        => "라우터"가 들어가 있는 총 집합으로,
+            "페이지 변경"이 이루어지는 모든 "주소와 컨텐츠들"이 들어가있다.
+
+                import { createRouter, createWebHistory } from 'vue-router'
+                import HomeView from '../views/HomeView.vue'
+
+                const routes = [
+                    {
+                    path: '/',
+                    name: 'home',
+                    component: HomeView
+                    },
+                    {
+                    path: '/about',
+                    name: 'about',
+                    component: () => import('../views/AboutView.vue')
+                    }
+                ]
+              
+    4) /src/views/xxx.vue
+        => "라우터가 불러오는 주소에 제공할 컨텐츠들이 들어가있다."
+            컨텐츠들은, 대부분 "components 폴더"에서, "임포트해온다".
+
+    5) /src/components/xxx.vue
+        => VIEW 에 들어갈 태그들이 들어있다.
+
+
+3. "연결단계 구체적 설명"  ==>>  "HOME 화면"이 표시되는 것의 연결예시(자세히)
+
+        1. "index.html" 안의 <div id="app"> </div>  
+            => " mount 될 곳 "
+
+        2. "App.vue"의 "/" 주소를 통해, 페이지 이동
+            <template>
+                <nav>
+                    <router-link to="/">Home</router-link> |
+
+
+        3. "/router/index.js" 안에서 "/" 에 들어갔을때 "표시할 페이지를 구체화"
+
+            import HomeView from '../views/HomeView.vue'
+
+            const routes = [
+            {
+                path: '/',
+                name: 'home',
+                component: HomeView
+            },
+        
+        4. "/views/HomeView.vue" 안에서 "router 로 export할 컨텐츠를 제공" , [ feat. {{ msg }} ] => msg 라는 것에 넣을 값도 같이
+            <template>
+                <div class="home">
+                    <img alt="Vue logo" src="../assets/logo.png">
+                    <HelloWorld msg="Welcome to Your Vue.js App"/>
+                </div>
+            </template>
+            
+            <script>
+                import HelloWorld from '@/components/HelloWorld.vue'
+
+        5. "view" 에 들어갈 "진짜 컨텐츠는" "component 폴더에 존재" , [ feat. {{ msg }} ] => msg 라는 변수를 생성하여, 동적으로 받음
+
+
+
