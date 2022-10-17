@@ -13,7 +13,40 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/databinding/string',
+    name: 'DataBindingStringView',
+    component: () =>
+      import(
+        /* webpackChunkName: "DataBinding" */ '../views/1_Databinding/DataBindingStringView.vue'
+      )
+  },
+  {
+    path: '/databinding/html',
+    name: 'DataBindingHtmlView',
+    component: () =>
+      import(
+        /* webpackChunkName: "DataBinding" */ '../views/1_Databinding/DataBindingHtmlView.vue'
+      )
+  },
+  {
+    path: '/databinding/input',
+    name: 'DataBindingInputView',
+    component: () =>
+      import(
+        /* webpackChunkName: "DataBinding" */ '../views/1_Databinding/DataBindingInputView.vue'
+      )
+  },
+  {
+    path: '/databinding/select',
+    name: 'DataBindingSelectView',
+    component: () =>
+      import(
+        /* webpackChunkName: "DataBinding" */ '../views/1_Databinding/DataBindingSelectView.vue'
+      )
   }
 ]
 

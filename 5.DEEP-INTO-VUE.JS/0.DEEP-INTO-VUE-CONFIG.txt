@@ -1,5 +1,9 @@
 [ 기본 ]=================================================================================================================================
 
+0. 장점
+    1) 하나의 페이지에서, 필요한 부분만 불러오기 때문에, 매우 빠른 응답속도를 얻을 수 있다.
+    2) 과정 중심의 기본자바스크립트와 다르게, 결과적으로 태그를 만들어 원하는 위치에 붙여놓을 수 있다.
+
 1. 설치
 
     1) vue 설치
@@ -136,6 +140,10 @@
         ( ) Unit Testing
         ( ) E2E Testing
 
+
+
+        
+
     ==> "선택"은 "스페이스바"
 
     2) 버젼은 3.0
@@ -157,6 +165,31 @@
             ESLint + Airbnb config
             ESLint + Standard config        ==> "가장 표준화된 이것 선택"
             ESLint + Prettier
+
+-       [추가사항] ***
+            1) prettier 를 설치한다.
+            2) root 폴더에,  .prettierrc 파일을 생성후
+                { 
+                    "semi" : false,
+                    "bracketSpacing" : true,
+                    "singleQuote" : true,
+                    "userTabs" : false,
+                    "trailingComma" : "none",
+                    "printWidth" : 80
+                }
+                를 입력한다
+
+            3) package.json 파일들 들어가서
+
+            4) "eslintConfig" 탭의
+                "rules": {"space-before-function-paren":"off"}
+
+            ==> 함수 사이사이의 띄어쓰기 규칙 제거
+
+            ==> "lint" 에 의해, "코딩 컨벤션"(규칙)이 강력하게 적용된다.
+                실질적으로 확인하면서 하기에는 너무 힘드니, prettier 를 사용후, 
+                [설정] - [Editor : Default Formatter] - [프리티어 포맷터] 를 설정 후, Standard config 에 맞춰 적용되게 만들어준다.
+
 
     5) "Lint" "코딩규칙 적용은 언제 할건가?"
         ? Please pick a preset: Manually select features
@@ -265,16 +298,27 @@
 
 3. "연결단계 구체적 설명"  ==>>  "HOME 화면"이 표시되는 것의 연결예시(자세히)
 
-        1. "index.html" 안의 <div id="app"> </div>  
+        1. [ 유일한 메인 페이지 index.html]
+            "index.html" 안의 <div id="app"> </div>  
             => " mount 될 곳 "
 
-        2. "App.vue"의 "/" 주소를 통해, 페이지 이동
+        2. [ import와 연결의 main.js ]
+            "main.js" 가 "index.html"에, 전부 mount 시킴
+ 
+        3. [ 모든 파일을 반죽해 [메뉴(라우트주소), 표시할 view 로드 ], 하나의 파일로, App.vue]
+
+            "App.vue"의 "/" 주소를 통해, 페이지 이동 및, "라우터에 연결된 view 가져옴"
+
             <template>
                 <nav>
                     <router-link to="/">Home</router-link> |
+                    ...
+-           <router-view />
+                => 해당 주소에 해당하는 라우터에, 연결될 view를 가져오겠다.
 
 
-        3. "/router/index.js" 안에서 "/" 에 들어갔을때 "표시할 페이지를 구체화"
+        4. [ view 를 이어줄 route, index.js]
+            "/router/index.js" 안에서 "/" 에 들어갔을때 "표시할 페이지를 구체화"
 
             import HomeView from '../views/HomeView.vue'
 
@@ -285,7 +329,8 @@
                 component: HomeView
             },
         
-        4. "/views/HomeView.vue" 안에서 "router 로 export할 컨텐츠를 제공" , [ feat. {{ msg }} ] => msg 라는 것에 넣을 값도 같이
+        5. [ 눈에 보이는 전체 화면 view ]
+            "/views/HomeView.vue" 안에서 "router 로 export할 컨텐츠를 제공" , [ feat. {{ msg }} ] => msg 라는 것에 넣을 값도 같이
             <template>
                 <div class="home">
                     <img alt="Vue logo" src="../assets/logo.png">
@@ -296,7 +341,79 @@
             <script>
                 import HelloWorld from '@/components/HelloWorld.vue'
 
-        5. "view" 에 들어갈 "진짜 컨텐츠는" "component 폴더에 존재" , [ feat. {{ msg }} ] => msg 라는 변수를 생성하여, 동적으로 받음
+        6. [ view에 들어갈 알맹이, 그리고 반복적으로 넣기 위하여 만들어 놓은 component ]
+            "view" 에 들어갈 "진짜 컨텐츠는" "component 폴더에 존재" , [ feat. {{ msg }} ] => msg 라는 변수를 생성하여, 동적으로 받음
 
+-           * 반드시 component 까지 들어가지 않아도 된다.
+-           * view에서 끝내도 상관 없지만, 리팩토링의 영역으로 component 를 쓴다.
+
+
+        https://www.youtube.com/watch?v=b0ImUEsqaAA
+        강의  51:34 / 3:51:00
+        2022 10 15
+        
+====================================================================================================================================
+
+4. 라우트
+    1) 기초
+        path, name, component 로 구성되어 있다.
+        
+        component :
+            XXX.vue 라고 적혀있는 모든 파일이면서,
+            해당하는 path로 진입할때 불러오는 파일
+
+    2) component 의 연결방법 2가지
+
+        1. import [변수명] from "경로" // 처리 후, component 안에 넣기
+
+            import HomeView from '../views/HomeView.vue'
+
+            const routes = [{
+                path: ...,
+                name: ...
+                component: HomeView
+            }]
+            
+        2. 직접 component 안에 함수형태로 넣기
+
+            const routes = [{
+                path: ...,
+                name: ...
+                component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+            }]
+-                                          * 화살표 함수의 적응
+                                                function () {
+                                                    return import('../views/AboutView.vue')
+                                                }
+-   3) 각 방법의 큰 차이
+        1. import 를 사용한 컴포넌트 삽입
+-           : 브라우저에서 로드할때, 'app.js' "안으로 모든 자바스크립트 코드"가 들어간다.
+
+            ==> 반드시 들어가야 하는 페이지, "HOME", "키 페이지" 등에 적용하면 좋다
+
+        2. 직접 component 안의 함수형태 삽입
+-           : 지정한 이름(webpackChunkName)으로, 따로 로드된다.
+            
+            ==> "반드시 들어가는 페이지를 제외한 페이지"에 적용하면 좋다
+
+                * 설명에 따르면
+                    // route level 'code-splitting'                                             ==> 코드가 라우트 레벨에서 따로 로드
+                    // this generates a separate chunk (about.[hash].js) for this route         ==> 이름은 [hash를 추가할 경우]
+                    // which is lazy-loaded when the route is visited.
+                    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')   
+
+-                   => /* webpackChunkName: "about" */ 이 이름으로, 로드된다.
+-                   => ,webpackPrefetch : "true" 를 추가하면, "이후에 들어갈 것으로 예상되니, 미리 브라우저 캐쉬에 저장한다." => 로드가 빨라짐
+                            단, 들어가지 않을 것으로 예상되는 것을 굳이 "prefetch"로 만들면 쓸데없는 초기 로드시간을 가지게 된다.
+
+-       *결론
+            1. 반드시 들어가는 페이지 (홈, 사이트의 키 페이지)
+                : import 후, component 에 추가
+
+            2. 반드시 들어가지는 않지만, 웬만하면 들어가는 페이지
+                : 직접 component에 함수로 import 후에, webpackPrefetch : true 로 추가
+            
+            3. 반드시 들어가지도 않고, 파일 용량도 작은 페이지
+                : 직접 component 에 함수로 import 
 
 

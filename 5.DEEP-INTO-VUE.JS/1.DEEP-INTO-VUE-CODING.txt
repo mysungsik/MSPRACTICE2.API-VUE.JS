@@ -1,0 +1,155 @@
+1. View 와 Component
+    : 둘 모두, 화면을 구성하는 최소단위이다.
+        이곳에 화면에 보일 것들을 코딩한다.
+
+    - Views
+        : 전체 화면 구성을 담당하는, 전체 덩어리를 구현할때 사용된다.
+
+-          * Vue Cli 를 사용할때에는(현재), Views 안에 들어가는 Vue 파일 뒤에는, 반드시 xxx"View".vue 라는 "이름 규칙"을 적용하도록 하자
+
+    - Components
+        : 전체 화면 중 "재사용 할" 구성요소를 "Components"에 넣고 사용한다.
+
+
+2. View
+
+    1. 기본골격 구조
+    - templete 을 치면, html선택            ==> html 태그를 넣는다
+    - script 를 치고, javascript 선택       ==> script 코드를 넣는다
+    - style을 치고, css-scoped 선택        ==> CSS 를 넣는다.
+
+        * scoped 를 빼고 그냥 css를 선택하면, "모든 파일에 대하여" 그 css 스타일이 적용
+            ==> 그런 행동은 "assets 폴더" 에 넣고 보통 하지," view 폴더에서는 안한다."
+
+        ==> 이게 바로 장점!
+            : "한 파일 내에 별도의 html, css, javascript 를 완벽히 분류하여, 관리할 수 있다!"
+
+    2. script - data
+
+        data(){
+            return {
+                userName : "CMS"
+            }
+        }
+
+    3. templete ( feat. root tag)
+
+        ** vue 에서는, 같은 레벨에서 태그를 반복해서 사용하면 안되고,
+            root tag를 하나 만들어 준 이후 태그를 여러개 넣어야한다.
+
+        [에러]
+            <h1></h1>
+            <p></p>
+
+        [옳은 코드]
+            <div>
+                <h1></h1>
+                <p></p>
+            </div>
+
+3. Data Binding
+    : 저장한 Data 들을, Html(template) 안에 집어넣어보자, 혹은 양쪽(html과 script의 Data)으로 모두 써먹어보자
+
+    [기본]
+        :"그 페이지에 사용할 모든 데이터는", 스크립트 태그의" data 함수 안에 객체 형태로 반드시 저장되어있어야 한다."
+
+        data(){
+            return {
+                userName : "CMS",
+                htmlString : "<p style="color:red;"> 빨간색 글자 </p>",
+                userInput : "",
+                num1 : 0,
+                num2 : 0 ,
+                arr : [],
+                obj : {}
+            }
+        }
+
+    [사용]
+
+        1. "문자열" "단뱡향" 데이터 바인딩
+            data 함수에 넣은 값을, html 태그, {{ }} 안에 넣어 사용한다
+
+            ex) <p> {{ userName }}</p>
+
+        2. "HTML" "단방향" 데이터 바인딩
+            data 함수에 넣은 값을, html 태그 v-html="" 안에 넣어 사용한다.
+
+            ex) <div v-html="htmlString"> </div>
+
+        3. "양방향" 데이터 바인딩 - "문자열"
+            "data 함수 안의 값" 과 "html의 input 값"이 "서로 연동되도록", html 태그 v-model="" 안에 넣어 사용한다.
+
+            ex) <input type="number" v-model="num1" />
+
+        4. "양방향" 데이터 바인딩 - "숫자"
+            "data 함수 안의 값" 과 "html의 input 값"이 "서로 연동되도록", html 태그 v-model.number="" 안에 넣어 사용한다.
+
+            ex) <input type="number" v-model.number="num2" />
+            
+
+    [연결]
+        : "router 폴더"에, "index.js" 안에 추가하여, 적은 코드를 사용가능하게 하자
+        
+
+* [추가사항 코드 스니펫에 대하여]
+
+    : 기본 코드 구성을 코드 스니펫에 저장하여, 편하게 기본구성을 완료시킨다.
+        단축키 [ctrl + space] 혹은, 코드창에 [몇글자치면나옴]
+
+    <위치>
+        [설정] - [사용자 코드 조각 구성(code snippets)] - [vue.json]
+        [vue.json] 이 없다면, [새 코드조각 구성]에서 만들면된다.
+
+    <코드>
+        "Basic Vue Code": {
+        "prefix": "vue-start",
+        "body": [
+        "<template>\n\n</template>\n\n<script>\n\texport default {\n\tcomponents:{},\n\tdata(){\n\t\treturn{\n\t\t\tsampleData:''\n\t\t}\n\t},\n\tsetup()\t{},\n\tcreated()\t{},\n\tmounted()\t{},\n\tunmounted()\t{},\n\tmethods:{} \n}\n</script>\n\n<style>\n</style>"
+        ],
+        "description": "Log output to console"
+        }
+
+    위 코드를 붙여넣는다.
+
+    <설명>
+
+        "Basic Vue Code" => 스니펫 이름
+        "prefix" => 코드창에서 [ ctrl + space ] 혹은 그냥 쳤을때, 나오는 "사용이름"
+        "body" => 내용
+
+* [추가사항 webPackChunkName 에 관하여]
+
+    webPackChunkName 을 동일하게 설정하면, 브라우저가 그 이름에 해당하는 페이지를 전부 한번에 내려받게 된다.
+        => 한 메뉴의 하위메뉴들을 동일한 webPackChunkName 으로 구성하면,
+            그 메뉴를 들어갈때, 모든 하위메뉴들이 동시에 내려받아져, 불러올때 빠른 로드 시간을 가지게 된다.
+
+
+4. 함수 연결
+    : script 의 method { } 를 이용하여, 함수를 짜고, html 태그 안에, [@이벤트="함수이름"] 을 사용하여 사용한다.
+
+    <template>
+        <div>
+            <input type="text" v-model="userInputData" />
+-           <button @click="myfunction"> 클릭 </button>
+        </div>
+    </template>
+
+    <script>
+        export default {
+            data() {
+                return {
+                    userInputData: ''
+                }
+        },
+-       methods: {
+            myfunction() {
+            console.log(this.userInputData)
+            }
+-       }}
+    </script>
+
+    ==> 원하는 이벤트를 @ 안에 적고, 파라미터가 있다면, 
+-       <button @click="myfunction(파라미터)"> 클릭 </button>
+        라고 적어도, "바로 실행되는 것이 아니고" "이벤트를 받아야만, 실행된다."
+
