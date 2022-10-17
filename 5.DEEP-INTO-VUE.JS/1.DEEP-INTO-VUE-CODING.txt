@@ -47,7 +47,7 @@
                 <p></p>
             </div>
 
-3. Data Binding
+3. Data Binding **
     : 저장한 Data 들을, Html(template) 안에 집어넣어보자, 혹은 양쪽(html과 script의 Data)으로 모두 써먹어보자
 
     [기본]
@@ -79,6 +79,7 @@
 
         3. "양방향" 데이터 바인딩 - "문자열"
             "data 함수 안의 값" 과 "html의 input 값"이 "서로 연동되도록", html 태그 v-model="" 안에 넣어 사용한다.
+                * v-model 은, 유저가 값을 변경가능한것에만 사용가능하다.
 
             ex) <input type="number" v-model="num1" />
 
@@ -86,10 +87,69 @@
             "data 함수 안의 값" 과 "html의 input 값"이 "서로 연동되도록", html 태그 v-model.number="" 안에 넣어 사용한다.
 
             ex) <input type="number" v-model.number="num2" />
-            
+
+        5. "양방향" 데이터 바인딩 - "SELECT"
+            : 어차피 하나만 선택 가능하므로, 별다를 것 없다
+
+            <select v-model="sampleData">
+                <option value="064">제주</option>
+                <option value="02">서울</option>
+            </select>
+
+        6. "양방향" 데이터 바인딩 - "CHECKBOX"
+-           : 여러개를 선택 가능하므로, 반드시 "Array []" 로 데이터를 처리해주어야 한다.
+            : 추가적으로, "name으로 연결했던, checkbox 묶음"들을, "Vue 에서는 v-model 로 연결"한다.
+
+            <div>
+                <label for="html"> html</label>
+-               <input type="checkbox" id="html" value="html" v-model="favoriteLang" />
+                <label for="js"> js</label>
+-               <input type="checkbox" id="js" value="js" v-model="favoriteLang" />
+            ...
+
+            <script>
+                ...
+                    data(){
+                        return{
+-                           favoriteLang : []
+                        }
+                    }
+
+        7. "양방향" 데이터 바인딩 - "Radio"
+            : 하나만 선택가능하므로, 역시나 일반적인 data 선택
+
+            ...
+            <div>
+                <label for="html"> html</label>
+                <input type="radio" id="html" value="html" v-model="radioData" />
+                <label for="js"> js</label>
+                <input type="radio" id="js" value="js" v-model="radioData" />
+            ...
+
+        8. "양, 단방향" "속성" 데이터 바인딩 - [ v-bind:Attibute="값" ]
+            : "속성(src, name, value 등...)" 에 대하여 "v-bind:Attibute " 를 사용한 데이터바인딩
+            : readonly 등의 input 중, "유저가 건드리면 안되는 값(위험하므로)" 값에 대하여, "속성 바인딩"을 통해, 단방향 데이터바인딩 가능
+-              * v-bind 는 생략가능하며, :Attibute 만 적어도 v-bind 가 있는것으로 간주한다.
+
+        9. 미친... 속성값을 v-bind 로 주무를 수 있다. "feat. 값이 있어야만 버튼 누르게하기"
+            :  "v-bind"를 사용해(생략했지만), "v-model"과 함께, "disabled 속성" 을 "true or false 의 값"을 만들어내, 마치, 조건문처럼 사용하기
+
+            <template>
+                <div>
+                    <input type="text" name="" id="" v-model="text1" />
+-                   <button :disabled="text1 === ''">조회</button>          ==> text1 이 없다면, disabled 조건이 true가 되어, 비활성화됌
+                </div>
+
+            <script>
+                data() {
+                    return {
+                    text1: ''
+                
 
     [연결]
         : "router 폴더"에, "index.js" 안에 추가하여, 적은 코드를 사용가능하게 하자
+
+            
         
 
 * [추가사항 코드 스니펫에 대하여]
@@ -102,13 +162,13 @@
         [vue.json] 이 없다면, [새 코드조각 구성]에서 만들면된다.
 
     <코드>
-        "Basic Vue Code": {
+    "Basic Vue Code": {
         "prefix": "vue-start",
         "body": [
-        "<template>\n\n</template>\n\n<script>\n\texport default {\n\tcomponents:{},\n\tdata(){\n\t\treturn{\n\t\t\tsampleData:''\n\t\t}\n\t},\n\tsetup()\t{},\n\tcreated()\t{},\n\tmounted()\t{},\n\tunmounted()\t{},\n\tmethods:{} \n}\n</script>\n\n<style>\n</style>"
+          "<template>\n\t<div></div>\n</template>\n\n<script>\nexport default {\n\tcomponents:{},\n\tdata(){\n\t\treturn{\n\t\t\tsampleData:''\n\t\t}\n\t},\n\tsetup()\t{},\n\tcreated()\t{},\n\tmounted()\t{},\n\tunmounted()\t{},\n\tmethods:{} \n}\n</script>\n\n<style>\n</style>"
         ],
         "description": "Log output to console"
-        }
+      }
 
     위 코드를 붙여넣는다.
 

@@ -47,6 +47,14 @@ const routes = [
       import(
         /* webpackChunkName: "DataBinding" */ '../views/1_Databinding/DataBindingSelectView.vue'
       )
+  },
+  {
+    path: '/databinding/attribute',
+    name: 'DataBindingAttributeView',
+    component: () =>
+      import(
+        /* webpackChunkName: "DataBinding" */ '../views/1_Databinding/DataBindingAttributeView.vue'
+      )
   }
 ]
 
