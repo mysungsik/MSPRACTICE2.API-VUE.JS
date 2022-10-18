@@ -65,6 +65,9 @@
             }
         }
 
+    [연결]
+        : "router 폴더"에, "index.js" 안에 추가하여, 적은 코드를 사용가능하게 하자(페이지 URL 연결)
+
     [사용]
 
         1. "문자열" "단뱡향" 데이터 바인딩
@@ -130,27 +133,132 @@
             : "속성(src, name, value 등...)" 에 대하여 "v-bind:Attibute " 를 사용한 데이터바인딩
             : readonly 등의 input 중, "유저가 건드리면 안되는 값(위험하므로)" 값에 대하여, "속성 바인딩"을 통해, 단방향 데이터바인딩 가능
 -              * v-bind 는 생략가능하며, :Attibute 만 적어도 v-bind 가 있는것으로 간주한다.
+            
+            <div>
+                <input type="text" v-bind:value="userId" readonly />
+-               <input type="text" :value="userId" readonly />
+-               <img :src="imgSrc" alt="img" style="width: 300px; height: 300px" />
 
-        9. 미친... 속성값을 v-bind 로 주무를 수 있다. "feat. 값이 있어야만 버튼 누르게하기"
+        8-1. "속성값을 v-bind 로 주무를 수 있다". "feat. 값이 있어야만 버튼 누르게하기"
             :  "v-bind"를 사용해(생략했지만), "v-model"과 함께, "disabled 속성" 을 "true or false 의 값"을 만들어내, 마치, 조건문처럼 사용하기
 
             <template>
                 <div>
                     <input type="text" name="" id="" v-model="text1" />
--                   <button :disabled="text1 === ''">조회</button>          ==> text1 이 없다면, disabled 조건이 true가 되어, 비활성화됌
+-                   <button :disabled=" text1 === '' ">조회</button>          ==> text1 이 없다면, disabled 조건이 true가 되어, 비활성화됌
                 </div>
 
             <script>
                 data() {
                     return {
                     text1: ''
-                
 
-    [연결]
-        : "router 폴더"에, "index.js" 안에 추가하여, 적은 코드를 사용가능하게 하자
+        9. "v-for" "반복문"을 사용한, "list(객체배열 혹은 배열)" 데이터바인딩
+            : 반드시, "key" 를 "잡아주어야한다."
+            : 반복문은 "in" 이든 "of" 든 상관없다.
+            : v-for=" data in datas "
+
+            <div>
+                <select v-model="choose">
+-                   < option :value="cityData.code" :key="cityData.code" v-for="cityData in cityDatas" >
+                        {{ cityData.name }}
+                    </option>
+
+        9-1. [추가사항] - "key"로 쓸 값이 없을때, "index" 뽑아서, "key에 넣어주기"
+-               :key="i" v-for="cityData in cityDatas" 반복문을 돌릴때, "(cityData,i) in cityDatas"  처럼, 괄호를 묶어 "i" 를 넣어주면
+
+                ==> 값이 하나 들어갈때 마다, "index 번호가 i 에 들어간다."
+                ==> 그리고 key값에 i를 넣어주면, 혹시 각 항목별 id가 없어서, key에 값을 넣지 못하는 불상사를 방지할 수 있다.
+
+                <div>
+                <select v-model="choose">
+-                   < option :value="cityData.code" :key=i v-for="(cityData,i) in cityDatas" >
+                        {{ cityData.name }}
+                    </option>
+
+        9-2. [추가사항] - "Vue를 통한, 아주 편한, [표] 만들기"
+            : 기존에는 list를 적고, 적절한 CSS 를 통해, grid를 만들었다. (표만드는 것이 매우 불편했기 때문에)
+            : "물론 그것도 괜찮겠지만, Vue는 표를 만들기 매우 편리하므로, 직접 표를 만드는 것이 더 나을 수 있을것같다."
+
+                "/views/1_Databinding/DataBindingListView.vue" 참조
+
+        10. "Class" 데이터 바인딩
+-           : class 데이터 바인딩의 특징 => { } 를 이용하여, 껏다켰다 하는 class 를 사용가능하다.
+            
+                <div>
+                    <p>클래스 바인딩</p>
+-                   <p :class="{ fontclass: true, colorclass: false }">클래스</p>
+                    
+                </div>
+                ...
+                <style>
+                    .colorclass {
+                    color: red;
+                    }
+                    .fontclass {
+                    font-size: 2rem;
+                    }
+
+                </style>
+
+-           * 주의사항 : class 의 이름에 '-' 가 들어가면, singleQuote 로 반드시 묶어주어야한다.
+                    'text-color-class' 처럼
 
             
-        
+        ** 10-1.[추가사항] "함수를 쓰지 않아도 되는 이벤트 상황"에서는, "굳이 함수를 쓰지 않아도, 상황을 변경 가능"하다. 
+-           :   어떻게? "data() 안의 값을 바꿔서"
+-                   ==> html에서도, v-model 없이(이건 다이렉트로 변경되고), data 안의 값을 건들수 있다.
+
+            <template>
+                <div>
+                    <h1 :class="{ bigclass: istrue }">새로운 클래스</h1>
+-                   <button @click="istrue = true">버튼</button>
+                ...
+
+            <script>
+                data() {
+                    return {
+-                     istrue: false
+                    }
+                ...
+
+            <style>
+                .bigclass {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: blue;
+                }
+            </style>
+
+                    
+
+       ** 10-2. [추가사항] "data() 안의 값을, html 에서 변경 가능하다"라는 것을 토대로, method 없이, "누르면 바뀌는 버튼 만들기"
+
+            <template>
+                <div>
+                    <h1 :class="{ bigclass: istrue }">새로운 클래스</h1>
+-                   <button @click="istrue = istrue === false">버튼</button>
+            <script>
+                data() {
+                    return {
+    -                    istrue: false
+                    }
+                ...
+
+        11. "Style" 바인딩
+            : style을 data(){} 안에, { } 를 사용하여, 키와 밸류로 저장하고 사용가능하다.
+
+            <template>
+-              <div :style="style1">정의된 스타일</div>
+
+            ...
+            <script>
+              data() {
+                return {
+-                   style1: {
+                        color: 'blue',
+                        fontSize: '45px'
+                    }
 
 * [추가사항 코드 스니펫에 대하여]
 
@@ -185,7 +293,7 @@
             그 메뉴를 들어갈때, 모든 하위메뉴들이 동시에 내려받아져, 불러올때 빠른 로드 시간을 가지게 된다.
 
 
-4. 함수 연결
+4. 함수 연결 [이벤트 리스너]
     : script 의 method { } 를 이용하여, 함수를 짜고, html 태그 안에, [@이벤트="함수이름"] 을 사용하여 사용한다.
 
     <template>
@@ -195,21 +303,117 @@
         </div>
     </template>
 
-    <script>
-        export default {
-            data() {
-                return {
-                    userInputData: ''
-                }
-        },
--       methods: {
-            myfunction() {
-            console.log(this.userInputData)
-            }
--       }}
-    </script>
+    1. "@click 리스너 + 기본"
 
-    ==> 원하는 이벤트를 @ 안에 적고, 파라미터가 있다면, 
--       <button @click="myfunction(파라미터)"> 클릭 </button>
-        라고 적어도, "바로 실행되는 것이 아니고" "이벤트를 받아야만, 실행된다."
+        <script>
+            export default {
+                data() {
+                    return {
+                        userInputData: ''
+                    }
+            },
+    -       methods: {
+                myfunction() {
+                console.log(this.userInputData)
+                }
+    -       }}
+        </script>
+
+        ==> 원하는 이벤트를 @ 안에 적고, 파라미터가 있다면, 
+    -       <button @click="myfunction(파라미터)"> 클릭 </button>
+            라고 적어도, "바로 실행되는 것이 아니고" "이벤트를 받아야만, 실행된다."
+
+    2. "@Change 리스너로 시 고르면 동 나오는 select 만들기"
+
+        참조 : /views/2_EventListenal/EventView.vue
+
+-   3. "ENTER 누르면, 버튼이 눌리는 @keyup 리스너 만들기"
+
+        1. "methods 안에 있는 함수"가 "methods 안에 있는 다른 함수를 참조하려면", "this. 를 반드시 붙여아한다".
+        2. 리스너로 함수를, 코드에 연결한 후, "event.keyCode" 를 사용하여, "ENTER 키를 인식" 할 수 있다.
+                *참고 : ENTER 키는 keyCode 13 이다.
+
+-   ** 3-1. [추가사항] vue 는 @keyup. 까지 치면 @keyup.enter, @keyup.delete, @keyup.left 등....
+                "수많은 키"들을 " keyCode 없이도 알아서 연결시켜준다."
+                
+        <template>
+        <div>
+-           <input type="text" v-model="enteredData" @keyup.enter="search" />
+            <button @click="search">검색</button>
+        </div>
+        ...
+        methods: {
+            search(event) {
+            console.log(this.enteredData)
+            }
+
+-   ** 3-2. [추가사항] 소름소름소름!!," 모든 이벤트"에 대하여 "추가적인 무언가"가 있음을 명심
+        
+        1. "ctrl 키" 눌렀는지?                      =>          @keyup.ctrl =""
+        2. "ctrl 키 + 엔터" 눌렀는지?               =>          @keyup.ctrl.enter =""
+
+        3. "submit 할때, preventDeafault 자동"      =>          @submit.prevent =""
+
+        4. "stopPropagation 자동"                   =>          @click.stop =""
+
+
+5. component 가져오기
+
+-   1. script 안에서 불러온다.
+        : import "가져올이름" from "상대위치"
+
+        <script>
+            import eTCviews from './2_EventListenal/EventKeyView.vue'
+
+    2. script 안에서, "export default" 안에, "components" 객체 안에, "키만" 넣어준다.
+
+        export default {
+            components: {
+            eTCviews
+            }
+
+    3. 위 html 코드에 적는 곳에, 마치 html 태그처럼 적는다.
+        <eTCviews></eTCviews>
+
+    3-1. 혹은 그냥 적고, "/" 로 마무리지어준다.
+        <eTCviews />
+
+6. component 가져오기 - 넣을 데이터가 있는 경우
+    : "보내는쪽 template" 에서, "아직 넣을 데이터가 없고",
+        "받는쪽 에서 줄 수 있는 경우"," 받는쪽에서 값을 넣기"
+
+    1. 보내는쪽 (ex] components 폴더) 에서, data에 없는 값을 {{ }} 안에 넣고, 
+        "export default 객체 안"의 "props 객체 안"에 "타입을 정의"한다.
+
+        <보내는쪽 >
+            <template>
+                <div>
+-                   <p>{{ look }}</p>
+                </div>
+            </template>
+
+            <script>
+                export default {
+-                   props: {
+-                       look: String
+-                   }
+        
+
+    2. 받는쪽 (ex] views 폴더) 에서, import 후, component 를 불러올 때, 값을 정의해 넣어준다.
+
+        <template>
+            <div>
+-           <ETCviews look="yes" />
+            </div>
+        </template>
+
+        <script>
+-           import ETCviews from './2_EventListenal/EventKeyView.vue'
+            export default {
+-               components: {
+-               ETCviews
+-               }
+            }
+        </script>
+            
 
