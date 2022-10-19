@@ -1,0 +1,20 @@
+1. v 디렉티브
+    v-model
+    v-html
+    v-if
+    v-for
+        => 전부 v 디렉티브
+
+2. 가상 DOM, 버츄어 DOM
+
+
+3. Composition API
+
+    기존에 사용하던 data, methods, computed 등의 여러 라이프 사이클 훅을 한번에 모아 사용 가능하게 만든 API
+
+    드럽게 헷갈리네...
+
+    일단 패스
+
+    나는 기존 사용방법대로 가자
+    

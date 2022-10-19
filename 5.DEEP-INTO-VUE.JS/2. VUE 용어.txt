@@ -1,8 +1,0 @@
-1. v 디렉티브
-    v-model
-    v-html
-    v-if
-    v-for
-        => 전부 v 디렉티브
-
-2. 가상 DOM, 버츄어 DOM

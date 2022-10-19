@@ -1,0 +1,4 @@
+1. Requires
+    node, express, vue cli
+
+2. create vue frontend

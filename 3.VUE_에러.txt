@@ -1,0 +1,35 @@
+1. Parsing error: Legacy octal literals are not allowed in strict mode. (9:16)
+    : 숫자 쓸 때, 가장 앞에 0 붙인 오류
+
+오류: data() {
+        return {
+            cityDatas: [
+                {
+                name: '인천',
+-               code: 032
+                },
+
+해결: data() {
+        return {
+            cityDatas: [
+                {
+                name: '인천',
+-               code: 32  OR "032"
+                },
+
+
+2. Component name "xxx" should always be multi-word
+    vue.config 파일
+        const { defineConfig } = require("@vue/cli-service");
+        module.exports = defineConfig({
+        transpileDependencies: true,
+-       lintOnSave: false,
+        });
+
+
+3. 어? fetch post 요청했는데 undefined 가 들어간다.
+
+    app.use(express.urlencoded({extended:false}))
+    app.use(express.json())
+
+    "parsing" 잘 되었나 확인
