@@ -1,0 +1,17 @@
+1. bootstrap 라이브러리 로드
+
+    검색 : bootstrap cdnjs
+    URL : https://cdnjs.com/libraries/bootstrap
+
+    CSS만 빼옴
+    https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css
+
+    <index.html>
+-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css" />
+
+
+    사용법: 부트스트랩 DOC 참조
+    https://getbootstrap.com/docs/5.2/getting-started/introduction/
+
+2. &copy; => 멋진 카피라이트 로고나옴
+

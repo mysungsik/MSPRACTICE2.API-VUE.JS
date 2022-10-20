@@ -1,4 +1,90 @@
+0. 목표
+
+    [JWT 토큰] 을 이용하여, 로그인한 유저에게, "인증된 토큰" 을 발급하고,
+    "인증된 토큰을 가진 유저는" 서버로 토큰과 함께 정보를 제시하여, 데이터를 받을 수 있고,
+    "인증된 토큰이 없는 유저는" 데이터를 받을 수 없으며,
+    "토큰의 유무 판단을 하여" 다른 데이터를 준다.
+
 1. Requires
     node, express, vue cli
 
 2. create vue frontend
+
+3. 몽고DB서버 올리고, CORS 오류 제거를 위한, Middleware 의 헤드 전부 코딩하고
+
+4. 라우터, 컨트롤러, 모델 전부 만들어두고, parse 를 위한, urlencoded와 json 전부 미들웨어로만들어 use
+
+    <기본세팅 완료>
+
+<실습>
+
+1. DB에 유저들의 회원가입정보가 있다고 가정하고,
+-   VUE(브라우저) 에서 보낸 "로그인 데이터" 와 "일치하는 정보가 있는지, 확인" 및 "일치하면 데이터를 보내주기"
+
+    ==> 일단 찾을때는 "Array.find()" 메서드를 이용하지만(db없다는 가정하에),
+-       사실 DB에서 찾을때는, "findOne({ _id: ...})" 하면 되지
+
+    <frontend - App.vue>================================================
+
+        <script>
+        export default {
+        data() {
+            return {
+            state: {
+                isLogedIn: "",
+                account: {
+                userid: "",
+                userName: "",
+                },
+                form: {
+                loginId: "",
+                loginPassword: "",
+                },
+            },
+            };
+        },
+        methods: {
+            async login() {
+            const response = await fetch("http://localhost:3000/api/account", {
+                method: "POST",
+                body: JSON.stringify({
+                enteredUserID: this.state.form.loginId,
+                enteredUserPassword: this.state.form.loginPassword,
+                }),
+                headers: {
+                "Content-type": "application/json",
+                },
+            });
+            const responseData = await response.json();
+            if (responseData.userInput) {
+                this.state.isLogedIn = true;
+                this.state.account.userid = responseData.userInput.loginId;
+                this.state.account.userName = responseData.userInput.name;
+            } else {
+                console.log(responseData.message);
+            }
+            },
+        }
+        };
+        </script>
+
+    <backend - controller>================================================
+    
+        function login(req, res) {
+            const enteredUserId = req.body.enteredUserID;
+            const enteredUserPassword = req.body.enteredUserPassword;
+        
+            const accessInfo = usersDatas.find(function (item) {
+            return (
+                item.loginId == enteredUserId && item.loginPw === enteredUserPassword
+            );
+            });
+        
+            if (accessInfo) {
+            res.json({ message: " good loged in", userInput: accessInfo });
+            } else {
+            res.json({ message: "login Faile" });
+            }
+        }
+
+2. 로그인은 잘된다. 그런데 새로고침하면 다 풀려버린다. "로그인정보를 어딘가에 저장해놓아야한다."
